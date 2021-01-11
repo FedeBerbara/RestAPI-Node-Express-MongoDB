@@ -18,10 +18,10 @@ const employeeSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    // role: {
-    //     type: String,
-    //     required: true
-    // }
+    role: {
+        type: String,
+        required: true
+    }
 }, {
     collection: 'Employees'
 });
