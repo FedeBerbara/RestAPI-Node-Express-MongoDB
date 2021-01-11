@@ -160,7 +160,7 @@ _The answer will be something like:_
 
 ---
 _This request will remove a specific customer._
-_DELETE by ID method:_ **localhost:xxxx/customer/delete/:id**
+_DELETE by ID method:_ **localhost:xxxx/employees/delete/:id**
 
 ---
 
