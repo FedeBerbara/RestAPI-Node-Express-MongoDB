@@ -5,27 +5,32 @@ const getEmployees = async () => {
 };
 
 const getOneEmployee = async (id) => {
-    return await Employees.findById(id);
+    return await Employees.findById( id );
 };
 
-const getEmployeesByRole = async (req) => {
-    return await Employees.find(req);
+const getEmployeesByRole = async (role) => {
+    return await Employees.find({ role });
 };
 
-const createEmployee = async () => {
+const createEmployee = async (bodyData) => {
 
+    const employeeData = new Employees({
+        name: bodyData.name,
+        last_name: bodyData.last_name,
+        email: bodyData.email,
+        age: bodyData.age,
+        role: bodyData.role
+    });
+
+    return await employeeData.save()
 };
 
-const updateEmployee = async () => {
-
+const updateEmployee = async (id, bodyData) => {
+    return await Employees.findByIdAndUpdate( id, bodyData, {useFindAndModify: false} );
 };
 
-const deleteOneEmployee = async () => {
-
+const deleteOneEmployee = async (id) => {
+    return await Employees.findByIdAndDelete( id )
 };
 
-const deleteAllEmployees = async () => {
-
-};
-
-module.exports = { getEmployees, getOneEmployee, getEmployeesByRole, createEmployee, updateEmployee, deleteOneEmployee, deleteAllEmployees };
+module.exports = { getEmployees, getOneEmployee, getEmployeesByRole, createEmployee, updateEmployee, deleteOneEmployee, };

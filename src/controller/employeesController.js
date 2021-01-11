@@ -1,12 +1,11 @@
 //* Require the functions that interact with the database
 const employeeServices = require('../services/employeeService');
-const Employees = require('../models/employeesModel');
 
 exports.getEmployees = async (req, res) => {
 
     try {
         const employees = await employeeServices.getEmployees();
-        res.json(employees);
+        res.status(200).json({ employees });
     } catch (error) {
         res.status(500).json({
             message: error.message
@@ -20,7 +19,7 @@ exports.getEmployeesById = async (req, res) => {
 
     try {
         employee = await employeeServices.getOneEmployee(req.params.id);
-        res.json(employee);
+        res.status(200).json({ employee });
     } catch (error) {
         return res.status(500).json({
             message: error.message
@@ -28,24 +27,27 @@ exports.getEmployeesById = async (req, res) => {
     }
 };
 
-exports.getEmployeesByRole = async () => {
+exports.getEmployeesByRole = async (req, res) => {
 
+    let role = req.params.role;
+
+    try {
+        role = await employeeServices.getEmployeesByRole(role);
+        res.status(200).json({ role })
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
 };
 
 exports.postEmployee = async (req, res) => {
 
-    const employeeData = new Employees({
-        name: req.body.name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        age: req.body.age
-    })
+    const bodyData = req.body;
 
     try {
-        const newEmployee = await employeeData.save();
-        res.status(201).json({
-            newEmployee
-        });
+        const newEmployee = await employeeServices.createEmployee(bodyData);
+        res.status(201).json({ newEmployee });
     } catch (error) {
         res.status(401).json({
             message: error.message
@@ -53,14 +55,35 @@ exports.postEmployee = async (req, res) => {
     }
 };
 
-exports.updateEmployee = async () => {
+exports.updateEmployee = async (req, res) => {
 
+    const bodyData = req.body;
+    let employee; 
+
+    try {
+        employee = await employeeServices.updateEmployee(req.params.id, bodyData);
+        res.status(200).json({
+            message: "Employee modified succesfully"
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
 };
 
-exports.deleteOneEmployee = async () => {
+exports.deleteOneEmployee = async (req, res) => {
 
-};
+    let employee; 
 
-exports.deleteAllEmployees = async () => {
-
+    try {
+        employee = await employeeServices.deleteOneEmployee(req.params.id);
+        res.status(200).json({ 
+            message: "Employee deleted succesfully"
+         });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
 };
